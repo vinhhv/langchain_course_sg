@@ -295,3 +295,6 @@ dist
 
 # MacOS
 .DS_Store
+
+# Vector storage
+emb/
