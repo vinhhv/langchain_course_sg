@@ -1,9 +1,11 @@
+import langchain
+
 from dotenv import load_dotenv
 from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
-import langchain
+from redundant_filter_retriever import RedundantFilterRetriever
 
 # Use when verbose=True is not working for the chain
 langchain.debug = True
@@ -17,12 +19,13 @@ db = Chroma(
     embedding_function=embeddings,
     persist_directory="emb",
 )
+retriever = RedundantFilterRetriever(embeddings=embeddings, chroma=db)
 
 # db.similarity_search("english language")
 
 # Retriever has a typeclass that different DBs must implement
 # Has "get_relevant_documents"
-retriever = db.as_retriever()
+# retriever = db.as_retriever()
 
 chain = RetrievalQA.from_chain_type(
     llm=chat,
